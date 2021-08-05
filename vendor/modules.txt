@@ -1,0 +1,32 @@
+# github.com/elazarl/goproxy v0.0.0-20210801061803-8e322dfb79c4
+## explicit
+# github.com/parnurzeal/gorequest v0.2.16
+## explicit
+github.com/parnurzeal/gorequest
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
+# github.com/scorpiotzh/mylog v1.0.7
+## explicit
+github.com/scorpiotzh/mylog
+# github.com/smartystreets/goconvey v1.6.4
+## explicit
+# go.uber.org/atomic v1.7.0
+go.uber.org/atomic
+# go.uber.org/multierr v1.6.0
+go.uber.org/multierr
+# go.uber.org/zap v1.18.1
+go.uber.org/zap
+go.uber.org/zap/buffer
+go.uber.org/zap/internal/bufferpool
+go.uber.org/zap/internal/color
+go.uber.org/zap/internal/exit
+go.uber.org/zap/zapcore
+# golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985
+## explicit
+golang.org/x/net/publicsuffix
+# gopkg.in/natefinch/lumberjack.v2 v2.0.0
+gopkg.in/natefinch/lumberjack.v2
+# moul.io/http2curl v1.0.0
+## explicit
+moul.io/http2curl
