@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"log"
 	"os"
 )
 
@@ -13,7 +14,7 @@ var (
 func Start(key string) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Error("panic:", err)
+			log.Println("panic:", err)
 		}
 	}()
 	listen(key)
@@ -23,15 +24,15 @@ func Start(key string) {
 func listen(key string) {
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		log.Info("READY ...")
+		log.Println("READY ...")
 		header, err := readHeader(reader)
 		if err != nil {
-			log.Error("readHeader err:", err.Error())
+			log.Println("readHeader err:", err.Error())
 			continue
 		}
 		payload, err := readPayload(reader, header.Len)
 		if err != nil {
-			log.Error("readPayload err:", err.Error())
+			log.Println("readPayload err:", err.Error())
 			continue
 		}
 		msg := Message{Header: header, Payload: payload}
@@ -44,7 +45,7 @@ func listen(key string) {
 		default:
 			SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		}
-		log.Info("SUCCESS ...")
+		log.Println("SUCCESS ...")
 	}
 }
 
