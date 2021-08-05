@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/parnurzeal/gorequest"
+	"log"
 	"time"
 )
 
@@ -48,8 +49,8 @@ func SendLarkTextNotify(key, title, text string) {
 	url := fmt.Sprintf(LarkNotifyUrl, key)
 	_, body, errs := gorequest.New().Post(url).Timeout(time.Second * 10).SendStruct(&data).End()
 	if len(errs) > 0 {
-		log.Error("sendLarkTextNotify req err:", errs)
+		log.Println("sendLarkTextNotify req err:", errs)
 	} else {
-		log.Info("sendLarkTextNotify req:", body)
+		log.Println("sendLarkTextNotify req:", body)
 	}
 }
