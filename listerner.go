@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 )
@@ -24,15 +25,18 @@ func Start(key string) {
 func listen(key string) {
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		log.Println("READY ...")
+		ready()
+		//log.Println("READY ...")
 		header, err := readHeader(reader)
 		if err != nil {
-			log.Println("readHeader err:", err.Error())
+			failure(err)
+			//log.Println("readHeader err:", err.Error())
 			continue
 		}
 		payload, err := readPayload(reader, header.Len)
 		if err != nil {
-			log.Println("readPayload err:", err.Error())
+			failure(err)
+			//log.Println("readPayload err:", err.Error())
 			continue
 		}
 		msg := Message{Header: header, Payload: payload}
@@ -45,7 +49,8 @@ func listen(key string) {
 		default:
 			SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		}
-		log.Println("SUCCESS ...")
+		success()
+		//log.Println("SUCCESS ...")
 	}
 }
 
@@ -83,4 +88,17 @@ func readPayload(reader *bufio.Reader, payloadLen int) (*Payload, error) {
 	}
 
 	return payload, nil
+}
+
+func ready() {
+	fmt.Fprint(os.Stdout, "READY\n")
+}
+
+func success() {
+	fmt.Fprint(os.Stdout, "RESULT 2\nOK")
+}
+
+func failure(err error) {
+	fmt.Fprintln(os.Stderr, err)
+	fmt.Fprint(os.Stdout, "Result 2\nFAIL")
 }
