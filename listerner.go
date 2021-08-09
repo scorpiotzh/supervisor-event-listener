@@ -4,18 +4,20 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 )
 
 var (
 	ErrPayloadLength = errors.New("Header中len长度与实际读取长度不一致")
+	stdin            = bufio.NewReader(os.Stdin)
+	stdout           = bufio.NewWriter(os.Stdout)
+	stderr           = bufio.NewWriter(os.Stderr)
 )
 
 func Start(key string) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Println("panic:", err)
+			_, _ = stderr.WriteString(fmt.Sprintf("panic: %v", err))
 		}
 	}()
 	listen(key)
@@ -23,33 +25,39 @@ func Start(key string) {
 
 // 监听事件, 从标准输入获取事件内容
 func listen(key string) {
-	reader := bufio.NewReader(os.Stdin)
+	_, _ = stdout.WriteString("key: " + key)
 	for {
+		// 发送后等待接收 event
 		ready()
-		header, err := readHeader(reader)
+		// 接收 header
+		header, err := readHeader(stdin)
 		if err != nil {
 			failure(err)
-			//log.Println("readHeader err:", err.Error())
 			continue
 		}
-		payload, err := readPayload(reader, header.Len)
+		// 接收 payload
+		payload, err := readPayload(stdin, header.Len)
 		if err != nil {
 			failure(err)
-			//log.Println("readPayload err:", err.Error())
 			continue
 		}
 		msg := Message{Header: header, Payload: payload}
+		var body string
 		switch header.EventName {
 		case "PROCESS_STATE_EXITED", "PROCESS_STATE_BACKOFF", "PROCESS_STATE_STOPPED", "PROCESS_STATE_FATAL":
-			SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
+			body, err = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		case "PROCESS_STATE_STARTING", "PROCESS_STATE_UNKNOWN", "PROCESS_STATE_STOPPING":
 		case "PROCESS_STATE_RUNNING":
-			SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
+			body, err = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		default:
-			SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
+			body, err = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		}
+		if err != nil {
+			failure(err)
+			continue
+		}
+		_, _ = stdout.WriteString(body)
 		success()
-		//log.Println("SUCCESS ...")
 	}
 }
 
@@ -90,14 +98,14 @@ func readPayload(reader *bufio.Reader, payloadLen int) (*Payload, error) {
 }
 
 func ready() {
-	fmt.Fprint(os.Stdout, "READY\n")
+	_, _ = stdout.WriteString(ResultReady)
 }
 
 func success() {
-	fmt.Fprint(os.Stdout, "RESULT 2\nOK")
+	_, _ = stdout.WriteString(ResultOk)
 }
 
 func failure(err error) {
-	fmt.Fprintln(os.Stderr, err)
-	fmt.Fprint(os.Stdout, "Result 2\nFAIL")
+	_, _ = stderr.WriteString(err.Error())
+	_, _ = stdout.WriteString(ResultFail)
 }

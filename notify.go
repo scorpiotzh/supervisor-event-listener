@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/parnurzeal/gorequest"
-	"log"
 	"time"
 )
 
@@ -29,9 +28,9 @@ type MsgData struct {
 	} `json:"content"`
 }
 
-func SendLarkTextNotify(key, title, text string) {
+func SendLarkTextNotify(key, title, text string) (string, error) {
 	if key == "" || text == "" {
-		return
+		return "", nil
 	}
 	var data MsgData
 	data.Email = ""
@@ -49,8 +48,7 @@ func SendLarkTextNotify(key, title, text string) {
 	url := fmt.Sprintf(LarkNotifyUrl, key)
 	_, body, errs := gorequest.New().Post(url).Timeout(time.Second * 10).SendStruct(&data).End()
 	if len(errs) > 0 {
-		log.Println("sendLarkTextNotify req err:", errs)
-	} else {
-		log.Println("sendLarkTextNotify req:", body)
+		return "", fmt.Errorf("sendLarkTextNotify req err:%v", errs)
 	}
+	return body, nil
 }
