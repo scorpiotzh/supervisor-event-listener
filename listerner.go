@@ -58,6 +58,7 @@ func listen(key string) {
 			continue
 		}
 		_, _ = stdout.WriteString(body)
+		_ = stdout.Flush()
 		success()
 	}
 }
