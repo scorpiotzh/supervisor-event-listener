@@ -28,9 +28,9 @@ type MsgData struct {
 	} `json:"content"`
 }
 
-func SendLarkTextNotify(key, title, text string) (string, error) {
+func SendLarkTextNotify(key, title, text string) string {
 	if key == "" || text == "" {
-		return "", nil
+		return ""
 	}
 	var data MsgData
 	data.Email = ""
@@ -48,7 +48,7 @@ func SendLarkTextNotify(key, title, text string) (string, error) {
 	url := fmt.Sprintf(LarkNotifyUrl, key)
 	_, body, errs := gorequest.New().Post(url).Timeout(time.Second * 10).SendStruct(&data).End()
 	if len(errs) > 0 {
-		return "", fmt.Errorf("sendLarkTextNotify req err:%v", errs)
+		return fmt.Sprintf("sendLarkTextNotify req err:%v", errs)
 	}
-	return body, nil
+	return body
 }
