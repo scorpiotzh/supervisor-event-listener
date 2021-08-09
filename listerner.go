@@ -33,13 +33,13 @@ func listen(key string) {
 		// 接收 header
 		header, err := readHeader(stdin)
 		if err != nil {
-			failure(err)
+			failure("readHeader", err)
 			continue
 		}
 		// 接收 payload
 		payload, err := readPayload(stdin, header.Len)
 		if err != nil {
-			failure(err)
+			failure("readPayload", err)
 			continue
 		}
 		msg := Message{Header: header, Payload: payload}
@@ -54,7 +54,7 @@ func listen(key string) {
 			body, err = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		}
 		if err != nil {
-			failure(err)
+			failure("SendLarkTextNotify", err)
 			continue
 		}
 		_, _ = stdout.WriteString(body)
@@ -108,8 +108,8 @@ func success() {
 	_ = stdout.Flush()
 }
 
-func failure(err error) {
-	_, _ = stderr.WriteString(err.Error())
+func failure(funcName string, err error) {
+	_, _ = stderr.WriteString(funcName + ": \n" + err.Error())
 	_ = stderr.Flush()
 	_, _ = stdout.WriteString(ResultFail)
 	_ = stdout.Flush()
