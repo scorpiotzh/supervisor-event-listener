@@ -26,7 +26,6 @@ func listen(key string) {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		ready()
-		//log.Println("READY ...")
 		header, err := readHeader(reader)
 		if err != nil {
 			failure(err)
