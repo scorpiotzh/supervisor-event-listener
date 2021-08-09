@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"os"
 )
 
@@ -17,7 +16,7 @@ var (
 func Start(key string) {
 	defer func() {
 		if err := recover(); err != nil {
-			_, _ = stderr.WriteString(fmt.Sprintf("panic: %v", err))
+			//_, _ = stderr.WriteString(fmt.Sprintf("panic: %v", err))
 		}
 	}()
 	listen(key)
