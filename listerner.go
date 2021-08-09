@@ -100,17 +100,17 @@ func readPayload(reader *bufio.Reader, payloadLen int) (*Payload, error) {
 
 func ready() {
 	_, _ = stdout.WriteString(ResultReady)
-	_ = stdout.Flush()
+	//_ = stdout.Flush()
 }
 
 func success() {
 	_, _ = stdout.WriteString(ResultOk)
-	_ = stdout.Flush()
+	//_ = stdout.Flush()
 }
 
 func failure(funcName string, err error) {
 	_, _ = stderr.WriteString(funcName + ": \n" + err.Error())
-	_ = stderr.Flush()
+	//_ = stderr.Flush()
 	_, _ = stdout.WriteString(ResultFail)
-	_ = stdout.Flush()
+	//_ = stdout.Flush()
 }
