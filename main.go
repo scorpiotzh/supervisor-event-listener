@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -18,7 +17,7 @@ const (
 func main() {
 	var key = flag.String("key", "", "notify key")
 	flag.Parse()
-	fmt.Println("key:", *key)
+	//fmt.Println("key:", *key)
 
 	stdin := bufio.NewReader(os.Stdin)
 	stdout := bufio.NewWriter(os.Stdout)
@@ -30,7 +29,7 @@ func main() {
 		_ = stdout.Flush()
 		// 接收header
 		line, _, _ := stdin.ReadLine()
-		_, _ = stderr.WriteString("read" + string(line))
+		_, _ = stderr.WriteString("read" + string(line) + *key)
 		_ = stderr.Flush()
 
 		header, payloadSize := parseHeader(line)
@@ -69,6 +68,6 @@ func parseHeader(data []byte) (header map[string]string,
 // 这里设置报警即可
 func alarm(header map[string]string, payload []byte) bool {
 	// send mail
-	fmt.Println(header, string(payload))
+	//fmt.Println(header, string(payload))
 	return true
 }
