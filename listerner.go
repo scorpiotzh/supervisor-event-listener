@@ -25,7 +25,7 @@ func Start(key string) {
 
 // 监听事件, 从标准输入获取事件内容
 func listen(key string) {
-	_, _ = stdout.WriteString("key: " + key)
+	//_, _ = stdout.WriteString("key: " + key)
 	//_ = stdout.Flush()
 	for {
 		// 发送后等待接收 event
