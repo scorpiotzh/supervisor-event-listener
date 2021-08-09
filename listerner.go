@@ -41,24 +41,24 @@ func listen(key string) {
 			failure("readPayload", err)
 			continue
 		}
-		_, _ = stdout.WriteString("解析 OK")
+		//_, _ = stdout.WriteString("解析 OK")
 		msg := Message{Header: header, Payload: payload}
-		var body string
+		//var body string
 		switch header.EventName {
 		case "PROCESS_STATE_EXITED", "PROCESS_STATE_BACKOFF", "PROCESS_STATE_STOPPED", "PROCESS_STATE_FATAL":
-			body = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
+			_ = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		case "PROCESS_STATE_STARTING", "PROCESS_STATE_UNKNOWN", "PROCESS_STATE_STOPPING":
 		case "PROCESS_STATE_RUNNING":
-			body = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
+			_ = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		default:
-			body = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
+			_ = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		}
 		if err != nil {
 			failure("SendLarkTextNotify", err)
 			continue
 		}
-		_, _ = stdout.WriteString(body)
-		_ = stdout.Flush()
+		//_, _ = stdout.WriteString(body)
+		//_ = stdout.Flush()
 		success()
 	}
 }

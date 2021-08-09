@@ -7,7 +7,7 @@ import (
 const (
 	ResultReady = "READY\n"
 	ResultOk    = "RESULT 2\nOK"
-	ResultFail  = "RESULT 2\nFAIL"
+	ResultFail  = "RESULT 4\nFAIL"
 )
 
 func main() {
