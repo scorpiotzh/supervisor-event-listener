@@ -99,7 +99,7 @@ func readPayload(reader *bufio.Reader, payloadLen int) (*Payload, error) {
 
 func ready() {
 	_, _ = stdout.WriteString(ResultReady)
-	//_ = stdout.Flush()
+	_ = stdout.Flush()
 }
 
 func success() {
