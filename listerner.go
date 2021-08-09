@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 )
 
 var (
-	ErrPayloadLength = errors.New("Header中len长度与实际读取长度不一致")
+	ErrPayloadLength = errors.New("header 中 len 长度与实际读取长度不一致")
 	stdin            = bufio.NewReader(os.Stdin)
 	stdout           = bufio.NewWriter(os.Stdout)
 	stderr           = bufio.NewWriter(os.Stderr)
@@ -16,7 +17,8 @@ var (
 func Start(key string) {
 	defer func() {
 		if err := recover(); err != nil {
-			//_, _ = stderr.WriteString(fmt.Sprintf("panic: %v", err))
+			_, _ = stderr.WriteString(fmt.Sprintf("panic: %v", err))
+			_ = stderr.Flush()
 		}
 	}()
 	listen(key)
@@ -24,8 +26,6 @@ func Start(key string) {
 
 // 监听事件, 从标准输入获取事件内容
 func listen(key string) {
-	//_, _ = stdout.WriteString("key: " + key)
-	//_ = stdout.Flush()
 	for {
 		// 发送后等待接收 event
 		ready()
@@ -41,9 +41,7 @@ func listen(key string) {
 			failure("readPayload", err)
 			continue
 		}
-		//_, _ = stdout.WriteString("解析 OK")
 		msg := Message{Header: header, Payload: payload}
-		//var body string
 		switch header.EventName {
 		case "PROCESS_STATE_EXITED", "PROCESS_STATE_BACKOFF", "PROCESS_STATE_STOPPED", "PROCESS_STATE_FATAL":
 			_ = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
@@ -57,8 +55,6 @@ func listen(key string) {
 			failure("SendLarkTextNotify", err)
 			continue
 		}
-		//_, _ = stdout.WriteString(body)
-		//_ = stdout.Flush()
 		success()
 	}
 }

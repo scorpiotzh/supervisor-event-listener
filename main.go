@@ -13,5 +13,7 @@ const (
 func main() {
 	var key = flag.String("key", "", "notify key")
 	flag.Parse()
-	Start(*key)
+	for {
+		Start(*key)
+	}
 }
