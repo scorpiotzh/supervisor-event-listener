@@ -65,12 +65,12 @@ func listen(key string) {
 // 读取header
 func readHeader(reader *bufio.Reader) (*Header, error) {
 	// 读取Header
-	data, err := reader.ReadString('\n')
+	data, _, err := reader.ReadLine()
 	if err != nil {
 		return nil, err
 	}
 	// 解析Header
-	header, err := ParseHeader(data)
+	header, err := ParseHeader(string(data))
 	if err != nil {
 		return nil, err
 	}
@@ -100,17 +100,17 @@ func readPayload(reader *bufio.Reader, payloadLen int) (*Payload, error) {
 
 func ready() {
 	_, _ = stdout.WriteString(ResultReady)
-	//_ = stdout.Flush()
+	_ = stdout.Flush()
 }
 
 func success() {
 	_, _ = stdout.WriteString(ResultOk)
-	//_ = stdout.Flush()
+	_ = stdout.Flush()
 }
 
 func failure(funcName string, err error) {
 	_, _ = stderr.WriteString(funcName + ": \n" + err.Error())
-	//_ = stderr.Flush()
+	_ = stderr.Flush()
 	_, _ = stdout.WriteString(ResultFail)
-	//_ = stdout.Flush()
+	_ = stdout.Flush()
 }
