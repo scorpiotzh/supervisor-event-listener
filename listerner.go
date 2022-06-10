@@ -51,10 +51,6 @@ func listen(key string) {
 		default:
 			_ = SendLarkTextNotify(key, "程序状态变化事件通知", msg.String())
 		}
-		if err != nil {
-			failure("SendLarkTextNotify", err)
-			continue
-		}
 		success()
 	}
 }
